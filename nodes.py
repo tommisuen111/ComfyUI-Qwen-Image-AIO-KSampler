@@ -366,7 +366,7 @@ class ExtraOptions:
     RETURN_TYPES = ("EXTRA_OPTIONS",)
     RETURN_NAMES = ("额外设定/Extra Options",)
     FUNCTION = "get_options"
-    CATEGORY = "wen_AIO_loader"
+    CATEGORY = "Qwen_AIO_loader"
     DESCRIPTION = "🎛️ 额外设定/Extra Options - 高级参数设置"
 
     def get_options(self):
