@@ -59,8 +59,8 @@ class QwenImageIntegratedKSampler:
 
     RETURN_TYPES = ("IMAGE", "LATENT", "IMAGE")
     RETURN_NAMES = ("生成图像Image", "（可选）Latent", "缩放后原图Scaled Image")
-    FUNCTION = "sample"
-    CATEGORY = "sampling"
+    FUNCTION = "Qwen_AIO_loader"
+    CATEGORY = "Qwen_AIO_loader"
     # 注意语言文件中不能用@符号
     DESCRIPTION = "🐋 千问图像集成采样器 - K采样器，智能多模态采样器，支持文生图/图生图双模式，优化官方偏移问题，更遵从指令，图片缩放、可处理多张参考图、自动显存/内存管理、批量生成、自动保存、声音通知、AuraFlow优化、CFG标准化调节等全方位功能，不需要连那么多线啦~~~~/🐋 Qwen Image Integrated KSampler - KSampler, intelligent multimodal sampler, supports text-to-image / image-to-image dual modes, optimizes official offset issues, better complies with instructions, image scaling, can process multiple reference images, automatic VRAM/RAM management, batch generation, automatic saving, sound notification, AuraFlow optimization, CFG normalization adjustment and other comprehensive functions, no need to connect so many wires~~~~"
 
@@ -445,11 +445,11 @@ class QwenImageControlNetIntegratedLoader:
         return (control_net_data_list,)
 
 NODE_CLASS_MAPPINGS = {
-    "QwenImageIntegratedKSampler": QwenImageIntegratedKSampler,
-    "QwenImageControlNetIntegratedLoader": QwenImageControlNetIntegratedLoader,
+    "QwenImage_AIO_KSampler": QwenImageIntegratedKSampler,
+    "QwenImage_AIO_ControlNetIntegratedLoader": QwenImageControlNetIntegratedLoader,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "QwenImageIntegratedKSampler": "🐋 千问图像集成采样器——Github:@luguoli",
-    "QwenImageControlNetIntegratedLoader": "🐋 千问ControlNet集成加载器——Github:@luguoli",
+    "QwenImage_AIO_KSampler": "Qwen_AIO集成采样器",
+    "QwenImage_AIO_ControlNetIntegratedLoader": "Qwen_ControlNet_AIO集成加载器",
 }
