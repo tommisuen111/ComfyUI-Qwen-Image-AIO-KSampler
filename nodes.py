@@ -22,9 +22,7 @@ class QwenImageIntegratedKSampler:
         generation_mode = ['文生图 text-to-image', '图生图 image-to-image']
         return {
             "required": {
-                "model": ("MODEL", {"tooltip": "🤖 Model - 扩散模型输入，用作图像生成的核心模型"}),
-                "clip": ("CLIP", {"tooltip": "🟡 Clip - CLIP模型，用于文本编码和条件生成"}),
-                "vae": ("VAE", {"tooltip": "🎨 Vae - VAE模型输入，用于将潜空间解码为最终可见图像"}),
+                "AIOckpt_name": (folder_paths.get_filename_list("checkpoints"), ), 
                 "positive_prompt": ("STRING", {"multiline": True, "dynamicPrompts": True, "placeholder": "正向提示词 positive_prompt", "tooltip": "✅ 正向提示 - 描述期望图像元索的文本提示"}),
                 "negative_prompt": ("STRING", {"multiline": True, "dynamicPrompts": True, "placeholder": "负向提示词 negative_prompt", "tooltip": "❌ 负向提示 - 描述要避免的图像元素的文本提示"}),
                 "generation_mode": (generation_mode, {"tooltip": "🎨 生成模式 - 选择文生图或图生图模式"}),
@@ -39,6 +37,9 @@ class QwenImageIntegratedKSampler:
                 "denoise": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 1.0, "step": 0.01, "tooltip": "🔄 降噪的强度，降低该值会保留原图的大部分内容从而实现图生图。"}),
             },
             "optional": {
+                "model": ("MODEL", {"tooltip": "🤖 Model - 扩散模型输入，用作图像生成的核心模型"}),
+                "clip": ("CLIP", {"tooltip": "🟡 Clip - CLIP模型，用于文本编码和条件生成"}),
+                "vae": ("VAE", {"tooltip": "🎨 Vae - VAE模型输入，用于将潜空间解码为最终可见图像"}),
                 "image1": ("IMAGE", {"tooltip": "🖼️ 图像1（主图） - 参考图像1（主图），用于条件生成和潜空间编码。如果不传入，则文生图。"}),
                 "image2": ("IMAGE", {"tooltip": "🖼️ 图像2 - 参考图像2，用于条件生成和潜空间编码"}),
                 "image3": ("IMAGE", {"tooltip": "🖼️ 图像3 - 参考图像3，用于条件生成和潜空间编码"}),
