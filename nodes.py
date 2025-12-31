@@ -397,7 +397,7 @@ class QwenImageControlNetIntegratedLoader:
     RETURN_TYPES = ("CONTROL_NET_DATA",)
     RETURN_NAMES = ("ControlNet 数据/ControlNet Data",)
     FUNCTION = "load_controlnet"
-    CATEGORY = "wen_AIO_loader"
+    CATEGORY = "Qwen_AIO_loader"
     DESCRIPTION = "🐋 千问 ControlNet 集成加载器 - 需要 ControlNet 时使用/🐋 Qwen ControlNet Integrated Loader"
 
     def load_controlnet(self, image, control_net_name, control_type, strength, start_percent, end_percent, mask=None, controlnet_data=None):
