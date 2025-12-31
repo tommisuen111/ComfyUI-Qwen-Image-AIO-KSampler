@@ -366,7 +366,7 @@ class ExtraOptions:
     RETURN_TYPES = ("EXTRA_OPTIONS",)
     RETURN_NAMES = ("额外设定/Extra Options",)
     FUNCTION = "get_options"
-    CATEGORY = "sampling"
+    CATEGORY = "wen_AIO_loader"
     DESCRIPTION = "🎛️ 额外设定/Extra Options - 高级参数设置"
 
     def get_options(self):
@@ -397,7 +397,7 @@ class QwenImageControlNetIntegratedLoader:
     RETURN_TYPES = ("CONTROL_NET_DATA",)
     RETURN_NAMES = ("ControlNet 数据/ControlNet Data",)
     FUNCTION = "load_controlnet"
-    CATEGORY = "conditioning/controlnet"
+    CATEGORY = "wen_AIO_loader"
     DESCRIPTION = "🐋 千问 ControlNet 集成加载器 - 需要 ControlNet 时使用/🐋 Qwen ControlNet Integrated Loader"
 
     def load_controlnet(self, image, control_net_name, control_type, strength, start_percent, end_percent, mask=None, controlnet_data=None):
