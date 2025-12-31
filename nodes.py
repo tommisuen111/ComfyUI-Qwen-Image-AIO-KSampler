@@ -10,7 +10,7 @@ import numpy as np
 from PIL import Image
 import os
 from .utils import *
-
+from nodes import CheckpointLoaderSimple
 
 
 class QwenImageIntegratedKSampler:
@@ -23,7 +23,7 @@ class QwenImageIntegratedKSampler:
         generation_mode = ['文生图 text-to-image', '图生图 image-to-image']
         return {
             "required": {
-                "AIOckpt_name": (folder_paths.get_filename_list("checkpoints"), ), 
+                "AIOmodel": (folder_paths.get_filename_list("checkpoints"), {"tooltip": "AIO Model选择，checkpoint目录"}), 
                 "positive_prompt": ("STRING", {"multiline": True, "dynamicPrompts": True, "placeholder": "正向提示词 positive_prompt", "tooltip": "✅ 正向提示 - 描述期望图像元索的文本提示"}),
                 "negative_prompt": ("STRING", {"multiline": True, "dynamicPrompts": True, "placeholder": "负向提示词 negative_prompt", "tooltip": "❌ 负向提示 - 描述要避免的图像元素的文本提示"}),
                 "generation_mode": (generation_mode, {"tooltip": "🎨 生成模式 - 选择文生图或图生图模式"}),
@@ -70,9 +70,17 @@ class QwenImageIntegratedKSampler:
     
 
 
-    def sample(self, AIOckpt_name, positive_prompt, negative_prompt, generation_mode, batch_size, width, height, seed, steps, cfg, sampler_name, scheduler, denoise=1.0, model=None, clip=None, vae=None, image1=None, image2=None, image3=None, image4=None, image5=None, latent=None, controlnet_data=None, auraflow_shift=0, cfg_norm_strength=0, enable_clean_gpu_memory=False, enable_clean_cpu_memory_after_finish=False, enable_sound_notification=False, instruction="", auto_save_output_folder="", output_filename_prefix="auto_save"):
+    def sample(self, AIOmodel, positive_prompt, negative_prompt, generation_mode, batch_size, width, height, seed, steps, cfg, sampler_name, scheduler, denoise=1.0, model=None, clip=None, vae=None, image1=None, image2=None, image3=None, image4=None, image5=None, latent=None, controlnet_data=None, auraflow_shift=0, cfg_norm_strength=0, enable_clean_gpu_memory=False, enable_clean_cpu_memory_after_finish=False, enable_sound_notification=False, instruction="", auto_save_output_folder="", output_filename_prefix="auto_save"):
 
-
+        if model is None or clip is None or vae is None:
+            loader = CheckpointLoaderSimple()
+            res_model, res_clip, res_vae = loader.load_checkpoint(AIOmodel)
+            if model is None:
+                model = res_model
+            if clip is None:
+                clip = res_clip
+            if vae is None:
+                vae = res_vae
 
 
 
