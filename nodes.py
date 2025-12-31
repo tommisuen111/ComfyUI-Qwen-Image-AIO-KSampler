@@ -10,6 +10,7 @@ import numpy as np
 from PIL import Image
 import os
 from .utils import *
+from nodes import CheckpointLoaderSimple
 
 
 class QwenImageIntegratedKSampler:
@@ -37,9 +38,9 @@ class QwenImageIntegratedKSampler:
                 "denoise": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 1.0, "step": 0.01, "tooltip": "🔄 降噪的强度，降低该值会保留原图的大部分内容从而实现图生图。"}),
             },
             "optional": {
-                "model": ("MODEL", {"tooltip": "🤖 Model - 扩散模型输入，用作图像生成的核心模型"}),
-                "clip": ("CLIP", {"tooltip": "🟡 Clip - CLIP模型，用于文本编码和条件生成"}),
-                "vae": ("VAE", {"tooltip": "🎨 Vae - VAE模型输入，用于将潜空间解码为最终可见图像"}),
+                "model": ("MODEL(optional)", {"tooltip": "🤖 Model - 扩散模型输入，用作图像生成的核心模型,如有接入将优先使用"}),
+                "clip": ("CLIP(optional)", {"tooltip": "🟡 Clip - CLIP模型，用于文本编码和条件生成,如有接入将优先使用"}),
+                "vae": ("VAE(optional)", {"tooltip": "🎨 Vae - VAE模型输入，用于将潜空间解码为最终可见图像,如有接入将优先使用"}),
                 "image1": ("IMAGE", {"tooltip": "🖼️ 图像1（主图） - 参考图像1（主图），用于条件生成和潜空间编码。如果不传入，则文生图。"}),
                 "image2": ("IMAGE", {"tooltip": "🖼️ 图像2 - 参考图像2，用于条件生成和潜空间编码"}),
                 "image3": ("IMAGE", {"tooltip": "🖼️ 图像3 - 参考图像3，用于条件生成和潜空间编码"}),
@@ -69,8 +70,17 @@ class QwenImageIntegratedKSampler:
     
 
 
-    def sample(self, model, clip, vae, positive_prompt, negative_prompt, generation_mode, batch_size, width, height, seed, steps, cfg, sampler_name, scheduler, denoise=1.0, image1=None, image2=None, image3=None, image4=None, image5=None, latent=None, controlnet_data=None, auraflow_shift=0, cfg_norm_strength=0, enable_clean_gpu_memory=False, enable_clean_cpu_memory_after_finish=False, enable_sound_notification=False, instruction="", auto_save_output_folder="", output_filename_prefix="auto_save"):
+    def sample(self, AIOckpt_name, model=None, clip=None, vae=None, positive_prompt, negative_prompt, generation_mode, batch_size, width, height, seed, steps, cfg, sampler_name, scheduler, denoise=1.0, image1=None, image2=None, image3=None, image4=None, image5=None, latent=None, controlnet_data=None, auraflow_shift=0, cfg_norm_strength=0, enable_clean_gpu_memory=False, enable_clean_cpu_memory_after_finish=False, enable_sound_notification=False, instruction="", auto_save_output_folder="", output_filename_prefix="auto_save"):
 
+        if model is None or clip is None or vae is None:
+            loader =  CheckpointLoaderSimple()
+            res_model, res_clip, res_vae = loader.load_checkpoint(AIOckpt_name)
+            if model is None:
+                model = res_model
+            if clip is None:
+                clip = res_clip
+            if vae is None:
+                vae = res_vae
 
         # Print start execution information
         print(f"🎯 开始执行采样任务/Starting sampling task ......")
