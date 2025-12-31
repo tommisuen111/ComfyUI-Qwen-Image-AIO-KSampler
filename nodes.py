@@ -38,9 +38,9 @@ class QwenImageIntegratedKSampler:
                 "denoise": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 1.0, "step": 0.01, "tooltip": "🔄 降噪的强度，降低该值会保留原图的大部分内容从而实现图生图。"}),
             },
             "optional": {
-                "model": ("MODEL_optional", {"tooltip": "🤖 Model - 扩散模型输入，用作图像生成的核心模型,如有接入将优先使用"}),
-                "clip": ("CLIP_optional", {"tooltip": "🟡 Clip - CLIP模型，用于文本编码和条件生成,如有接入将优先使用"}),
-                "vae": ("VAE_optional", {"tooltip": "🎨 Vae - VAE模型输入，用于将潜空间解码为最终可见图像,如有接入将优先使用"}),
+                "model": ("MODEL", {"tooltip": "🤖 Model - 扩散模型输入，用作图像生成的核心模型,如有接入将优先使用"}),
+                "clip": ("CLIP", {"tooltip": "🟡 Clip - CLIP模型，用于文本编码和条件生成,如有接入将优先使用"}),
+                "vae": ("VAE", {"tooltip": "🎨 Vae - VAE模型输入，用于将潜空间解码为最终可见图像,如有接入将优先使用"}),
                 "image1": ("IMAGE", {"tooltip": "🖼️ 图像1（主图） - 参考图像1（主图），用于条件生成和潜空间编码。如果不传入，则文生图。"}),
                 "image2": ("IMAGE", {"tooltip": "🖼️ 图像2 - 参考图像2，用于条件生成和潜空间编码"}),
                 "image3": ("IMAGE", {"tooltip": "🖼️ 图像3 - 参考图像3，用于条件生成和潜空间编码"}),
