@@ -18,6 +18,8 @@ class QwenImageIntegratedKSampler:
     def __init__(self):
         self.device = comfy.model_management.intermediate_device()
 
+    _loader = CheckpointLoaderSimple()
+
     @classmethod
     def INPUT_TYPES(s):
         generation_mode = ['文生图 text-to-image', '图生图 image-to-image']
@@ -44,8 +46,6 @@ class QwenImageIntegratedKSampler:
                 "image1": ("IMAGE", {"tooltip": "🖼️ 图像1（主图） - 参考图像1（主图），用于条件生成和潜空间编码。如果不传入，则文生图。"}),
                 "image2": ("IMAGE", {"tooltip": "🖼️ 图像2 - 参考图像2，用于条件生成和潜空间编码"}),
                 "image3": ("IMAGE", {"tooltip": "🖼️ 图像3 - 参考图像3，用于条件生成和潜空间编码"}),
-                "image4": ("IMAGE", {"tooltip": "🖼️ 图像4 - 参考图像4，用于条件生成和潜空间编码"}),
-                "image5": ("IMAGE", {"tooltip": "🖼️ 图像5 - 参考图像5，用于条件生成和潜空间编码"}),
                 "latent": ("LATENT", {"tooltip": "🟣 Latent - 文生图、图生图（传入了主图）可不传，自动创建，如需使用ControlNet等可自行传入"}),
                 "controlnet_data": ("CONTROL_NET_DATA", {"tooltip": "🌿 ControlNet 数据（可选） - 输入 ControlNet 集成加载器输出的数据包，直接应用 ControlNet 控制"}),
                 "auraflow_shift": ("FLOAT", {"default": 3.0, "min": 0.0, "max": 100.0, "step": 0.01, "tooltip": "⚡ 采样算法AuraFlow移位 - 采样算法（AuraFlow） 移位Shift参数，影响速度和质量 (0-100)"}),
@@ -70,11 +70,11 @@ class QwenImageIntegratedKSampler:
     
 
 
-    def sample(self, AIOmodel, positive_prompt, negative_prompt, generation_mode, batch_size, width, height, seed, steps, cfg, sampler_name, scheduler, denoise=1.0, model=None, clip=None, vae=None, image1=None, image2=None, image3=None, image4=None, image5=None, latent=None, controlnet_data=None, auraflow_shift=0, cfg_norm_strength=0, enable_clean_gpu_memory=False, enable_clean_cpu_memory_after_finish=False, enable_sound_notification=False, instruction="", auto_save_output_folder="", output_filename_prefix="auto_save"):
+    def sample(self, AIOmodel, positive_prompt, negative_prompt, generation_mode, batch_size, width, height, seed, steps, cfg, sampler_name, scheduler, denoise=1.0, model=None, clip=None, vae=None, image1=None, image2=None, image3=None, latent=None, controlnet_data=None, auraflow_shift=0, cfg_norm_strength=0, enable_clean_gpu_memory=False, enable_clean_cpu_memory_after_finish=False, enable_sound_notification=False, instruction="", auto_save_output_folder="", output_filename_prefix="auto_save"):
 
         if model is None or clip is None or vae is None:
             loader = CheckpointLoaderSimple()
-            res_model, res_clip, res_vae = loader.load_checkpoint(AIOmodel)
+            res_model, res_clip, res_vae = self._loader.load_checkpoint(AIOmodel)
             if model is None:
                 model = res_model
             if clip is None:
@@ -150,7 +150,7 @@ class QwenImageIntegratedKSampler:
 
             # Scale reference images if needed
 
-            images_scaled = [image1, image2, image3, image4, image5]
+            images_scaled = [image1, image2, image3]
 
             if width > 0 and height > 0:
                 print(f"📏 [Image Scale] 将图像缩放至 / Scaling reference images to {width}x{height}")
@@ -167,9 +167,9 @@ class QwenImageIntegratedKSampler:
 
                 print("✅ [Image Scale] 图像缩放完成 / Reference images scaled successfully")
 
-            image1_scaled, image2_scaled, image3_scaled, image4_scaled, image5_scaled = images_scaled
+            image1_scaled, image2_scaled, image3_scaled = images_scaled
 
-            image_prompt, images_vl, llama_template, ref_latents = get_image_prompt(vae, image1_scaled, image2_scaled, image3_scaled, image4_scaled, image5_scaled, upscale_method="lanczos", crop="disabled", instruction=instruction)
+            image_prompt, images_vl, llama_template, ref_latents = get_image_prompt(vae, image1_scaled, image2_scaled, image3_scaled, upscale_method="lanczos", crop="disabled", instruction=instruction)
 
             print("⏳ [Prompt] 正在生成正向条件 / Generating positive condition...")
             positive = prompt_encode(clip, positive_prompt, image_prompt=image_prompt, images_vl=images_vl, llama_template=llama_template, ref_latents=ref_latents)
